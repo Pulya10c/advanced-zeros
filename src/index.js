@@ -5,6 +5,7 @@ module.exports = function getZerosCount(number, base) {
     constructor () {
       this.arr = [];
       this.num = 2;
+      //this.indices = [];
       
     }
     getNum (x) {
@@ -24,9 +25,20 @@ module.exports = function getZerosCount(number, base) {
       }
     }
       this.arr.sort((left, right) => left-right);
-      return Number(this.arr[this.arr.length-1]);
-     
+
+      let indices = [];
+      let idx = this.arr.indexOf(this.arr[this.arr.length-1]);
+while (idx != -1) {
+  indices.push(idx);
+  idx = this.arr.indexOf(this.arr[this.arr.length-1], idx + 1);
+}
+
+      return {
+        MaxFactor: Number(this.arr[this.arr.length-1]), 
+        degFactor: indices.length
+      };
     }
+   
   }
   
     
@@ -35,14 +47,14 @@ module.exports = function getZerosCount(number, base) {
   var promtFactor = sN.getNum (base);
 
   let count = 0;
-  let n = Math.trunc(number/promtFactor);
+  let n = Math.trunc(number/promtFactor.MaxFactor);
   //if (n=0) {return 0;}
   while(n > 0) {
     count = count + n;
-    n = Math.trunc(n/promtFactor);
+    n = Math.trunc(n/promtFactor.MaxFactor);
   }
  
  
 
-  return count;
+  return Math.trunc(count/promtFactor.degFactor);
 }
